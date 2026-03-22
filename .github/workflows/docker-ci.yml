@@ -42,4 +42,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
-          file: ./docker
+          file: ./docker/Dockerfile
