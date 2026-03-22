@@ -11,11 +11,11 @@ declare handler_script="$DDNS_ROUTE53_SCRIPT"
 declare old_ip ip
 
 function errlog() {
-  echo "$(date +"$DATE_FORMAT") $@" >&2
+  echo "$(date +"$DATE_FORMAT")" "$@" >&2
 }
 
 function log() {
-  echo "$(date +"$DATE_FORMAT") $@"
+  echo "$(date +"$DATE_FORMAT")" "$@"
 }
 
 function usage() {
