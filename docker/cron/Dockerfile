@@ -1,8 +1,10 @@
-FROM amazon/aws-cli
-ENTRYPOINT []
-
+FROM alpine
 ARG UPDATE_FREQUENCY_MINUTES=30
 ARG TARGETARCH
+
+RUN apk add --no-cache curl
+RUN apk add --no-cache bash
+RUN apk add --no-cache aws-cli
 
 # Install supercronic: https://github.com/aptible/supercronic/releases/tag/v0.2.44
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.44/supercronic-linux-$TARGETARCH \

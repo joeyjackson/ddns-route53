@@ -44,7 +44,7 @@ function valid-ip() {
       (( octet <= 255 )) || return 1
     done
   elif [[ "$ip" =~ ^[0-9a-fA-F:]\+$ ]]; then # Let's take the easy way out with validation of IPv6 addresses
-      return 1
+    return 1
   fi
   return 0
 }
