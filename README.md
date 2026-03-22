@@ -1,12 +1,11 @@
 # ddns-route53
 
-[![Build Status](https://travis-ci.org/mthssdrbrg/ddns-route53.svg?branch=main)](https://travis-ci.org/mthssdrbrg/ddns-route53)
-[![GitHub Release](https://img.shields.io/github/release/mthssdrbrg/ddns-route53.svg)]()
+[![GitHub Release](https://img.shields.io/github/release/joeyjackson/ddns-route53.svg)]()
 
 Simple dynamic DNS updater script using Amazon Route53.
 
 Source is originally from [Roll your own dynamic DNS service using Amazon Route53](https://willwarren.com/2014/07/03/roll-dynamic-dns-service-using-amazon-route53)
-though it's been modified to use OpenDNS for getting the current IP address, as
+though it has been modified to use ifconfig.co (see: https://github.com/mpolden/echoip) for getting the current IP address, as
 well as usage of command line arguments and environment variables.
 
 ## Requirements
@@ -22,7 +21,7 @@ curl -sLO https://github.com/joeyjackson/ddns-route53/raw/$VERSION/ddns-route53
 ```
 
 The following IAM policy (or something similar) will have to be applied to an user or role.
-Unfortunately it's not possible to restrict access to specific resource record (yet), but
+Unfortunately it is not possible to restrict access to specific resource record (yet), but
 a workaround is to create a "sub" hosted zone for a specific record.
 
 ```json
@@ -35,7 +34,7 @@ a workaround is to create a "sub" hosted zone for a specific record.
         "route53:ListResourceRecordSets"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:route53:::hostedzone/EXAMPLE"
+      "Resource": "arn:aws:route53:::hostedzone/ZONE_ID"
     }
   ]
 }
@@ -44,7 +43,7 @@ a workaround is to create a "sub" hosted zone for a specific record.
 ## Usage
 
 ```shell
-$ ddns-route53 --zone-id <ZONE_ID> --record-set <RECORD_SET>
+$ ddns-route53 --zone-id $DDNS_ROUTE53_ZONE_ID --record-set $DDNS_ROUTE53_RECORD_SET 
 ```
 
 > Note: long options on the form `--long-option=` are not supported.
@@ -66,7 +65,7 @@ variables.
 * `DDNS_ROUTE53_RECORD_SET`: Amazon Route53 record set name.
 * `DDNS_ROUTE53_SCRIPT`: path to script to execute on changes.
 
-### Docker
+## Docker
 Docker images are available to run the script both ad-hoc and periodically on a cron. 
 The Dockerfiles are under the `docker` and `docker/cron` directories respectively. 
 Images can be built using the standard docker commands from the root of the repository or pulled from DockerHub.
