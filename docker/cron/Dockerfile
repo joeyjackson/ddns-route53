@@ -1,11 +1,12 @@
-FROM amazon/aws-cli:latest
+FROM amazon/aws-cli
 ENTRYPOINT []
 
 ARG UPDATE_FREQUENCY_MINUTES=30
+ARG TARGETARCH
 
 # Install supercronic: https://github.com/aptible/supercronic/releases/tag/v0.2.44
-ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.44/supercronic-linux-amd64 \
-    SUPERCRONIC=supercronic-linux-amd64
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.44/supercronic-linux-$TARGETARCH \
+    SUPERCRONIC=supercronic-linux-$TARGETARCH
 
 RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && chmod +x "$SUPERCRONIC" \
