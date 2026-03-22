@@ -13,12 +13,12 @@ well as usage of command line arguments and environment variables.
 
 * `bash`
 * `awscli`
-* `dig`
+* `curl`
 
 ## Installation
 
 ```shell
-curl -sLO https://github.com/mthssdrbrg/ddns-route53/raw/$VERSION/ddns-route53
+curl -sLO https://github.com/joeyjackson/ddns-route53/raw/$VERSION/ddns-route53
 ```
 
 The following IAM policy (or something similar) will have to be applied to an user or role.
@@ -54,7 +54,7 @@ are set, an A type record and a TTL of 300 seconds.
 
 See `ddns-route53 --help` for more information about command line arguments.
 
-It's possible to set a number of environment variables instead of using command
+It is possible to set a number of environment variables instead of using command
 line arguments, though command line arguments take precedence over environment
 variables.
 
@@ -65,6 +65,33 @@ variables.
 * `DDNS_ROUTE53_ZONE_ID`: Amazon Route53 hosted zone ID.
 * `DDNS_ROUTE53_RECORD_SET`: Amazon Route53 record set name.
 * `DDNS_ROUTE53_SCRIPT`: path to script to execute on changes.
+
+### Docker
+Docker images are available to run the script both ad-hoc and periodically on a cron. 
+The Dockerfiles are under the `docker` and `docker/cron` directories respectively. 
+Images can be built using the standard docker commands from the root of the repository or pulled from DockerHub.
+```shell
+docker build -t joeyjackson/ddns-route53 -f docker/Dockerfile .
+docker build -t joeyjackson/ddns-route53-cron -f docker/cron/Dockerfile .
+```
+
+To just run a single invocation of the tool:
+```shell
+docker run --rm -it \
+  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  joeyjackson/ddns-route53 --zone-id $DDNS_ROUTE53_ZONE_ID --record-set $DDNS_ROUTE53_RECORD_SET
+```
+
+To run a container that will periodically invoke the tool on a cron:
+```shell
+docker run --rm -d \
+  -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  -e DDNS_ROUTE53_ZONE_ID=$DDNS_ROUTE53_ZONE_ID \
+  -e DDNS_ROUTE53_RECORD_SET=$DDNS_ROUTE53_RECORD_SET \
+  joeyjackson/ddns-route53-cron
+```
 
 ## Copyright
 

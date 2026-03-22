@@ -11,11 +11,11 @@ declare handler_script="$DDNS_ROUTE53_SCRIPT"
 declare old_ip ip
 
 function errlog() {
-  echo "$@" >&2
+  echo "$(date +"$DATE_FORMAT") $@" >&2
 }
 
 function log() {
-  echo "$@"
+  echo "$(date +"$DATE_FORMAT") $@"
 }
 
 function usage() {
@@ -73,9 +73,9 @@ function init-args() {
   done
   if [[ -z "$ip" ]]; then
     if [[ $record_type = "AAAA" ]]; then
-      ip="$(dig +short -6 myip.opendns.com aaaa @resolver1.opendns.com)"
+      ip="$(curl -6 -s ifconfig.co)"
     else
-      ip="$(dig +short -4 myip.opendns.com @resolver1.opendns.com)"
+      ip="$(curl -4 -s ifconfig.co)"
     fi
     # shellcheck disable=SC2181 # this is intentional
     (( $? != 0 )) && ip=""
@@ -146,7 +146,7 @@ function main() {
     log "IP changed from '$old_ip' to '$ip', updating entry"
     update-dns-entry "$ip" && run-handler-script "$old_ip" "$ip"
   else
-    log "Current IP == $ip"
+    log "No IP change detected, current IP == $ip, no action taken"
   fi
   exit $?
 }
